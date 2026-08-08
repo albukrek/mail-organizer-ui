@@ -98,6 +98,31 @@ function App() {
           </div>
         </>
       )}
+
+      {/* Email Management Toolbar */}
+      {loaded && (
+        <div className="toolbar-container">
+          <div className="toolbar-group">
+            <button className="btn toolbar-btn">Matched Emails</button>
+            <button className="btn btn-danger toolbar-btn">Delete Selected</button>
+            <button className="btn toolbar-btn">Approve Selected</button>
+            <button className="btn toolbar-btn">Approve All</button>
+          </div>
+          <div className="toolbar-separator"></div>
+          <div className="toolbar-group">
+            <select className="toolbar-dropdown">
+              <option value="">Select Label Group</option>
+              <option value="001">001 - FAMILY</option>
+              <option value="002">002 - BILLS AND INVOICE</option>
+              <option value="003">003 - WORK</option>
+              <option value="005">005 - INSURANCE</option>
+              <option value="007">007 - FRIENDS</option>
+              <option value="100">100 - GENERAL</option>
+            </select>
+            <button className="btn toolbar-btn">Apply</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
