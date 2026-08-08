@@ -1,16 +1,50 @@
-# React + Vite
+# Mail Organizer UI Prototype
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A React + Vite application that demonstrates a UI for organizing Gmail emails. This is a presentation/prototype app that visualizes email categorization concepts without actual Gmail API integration.
 
-Currently, two official plugins are available:
+## Project Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+This UI prototype implements an 8-point plan for an intelligent email organizer:
 
-## React Compiler
+1. **Gmail Logo** - Integrated official Gmail branding
+2. **"My Mail Organizer" Title** - Prominent heading with subtitle
+3. **"Open Gmail ↗" Link** - External link to Gmail
+4. **"Load Data" Toggle** - Button to load email data
+5. **Stats Row** - Display of total emails, matched, unmatched, and label groups
+6. **Email Management Toolbar** - Horizontal toolbar with filter dropdown, select all checkbox, and action buttons (Delete Selected, Approve Selected, Approve All, Apply)
+7. **Matched Emails Panel** - Displays emails categorized into label groups (FAMILY, BILLS AND INVOICE, WORK, INSURANCE, FRIENDS, GENERAL) with sender, subject, confidence level, and date
+8. **Unmatched Emails Panel** - Displays emails not found in known database with options to delete all or selected emails
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Key Features
 
-## Expanding the Oxlint configuration
+- Dark theme UI with modern styling
+- Responsive layout with clear visual hierarchy
+- Color-coded confidence levels (High ≥80%, Medium 50-79%, Low <50%)
+- Complete email management workflow with selection and batch operations
+- Clean separation between matched and unmatched emails
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Technical Stack
+
+- React 19 with Vite
+- Tailwind CSS v4 for styling
+- ShadCN/ui components for UI elements
+- TypeScript for type safety
+- Oxlint for code quality
+
+## Usage
+
+1. Install dependencies: `npm install`
+2. Start development server: `npm run dev`
+3. Open in browser: http://localhost:5173
+
+## Note
+
+This is a UI prototype only. It uses static mock data and does not connect to the Gmail API. For real email processing, integration with Gmail API would be required in a production implementation.
+
+## Documentation
+
+For complete planning details, see the Obsidian vault:
+`/Users/arikalbukrek/Library/Mobile Documents/iCloud~md~obsidian/Documents/AI Knowledge Graph/My Mail Organizer/UI mail organized under signal.md`
+
+---
+*Built with React + Vite | August 8, 2026*
