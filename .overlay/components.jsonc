@@ -1,0 +1,110 @@
+// File generated with Overlay Studio, a code-first UI design editor.
+// Learn more: https://docs.overlay.studio
+
+// Note: you can commit this file to the repo if you want to collaborate
+// with others (and share Overlay component mappings).
+// If not, add `.overlay` to your `.gitignore` file.
+{
+  "components": [
+    {
+      "source": "src/App.jsx",
+      "export": "default"
+    },
+    {
+      "source": "src/components/ui/button.tsx",
+      "export": "Button"
+    },
+    {
+      "source": "src/components/ui/card.tsx",
+      "export": "Card"
+    },
+    {
+      "source": "src/components/ui/input.tsx",
+      "export": "Input"
+    },
+    {
+      "source": "src/components/ui/badge.tsx",
+      "export": "Badge"
+    },
+    {
+      "source": "src/components/ui/checkbox.tsx",
+      "export": "Checkbox"
+    },
+    {
+      "source": "src/components/ui/select.tsx",
+      "export": "Select"
+    },
+    {
+      "source": "src/components/ui/separator.tsx",
+      "export": "Separator"
+    },
+    {
+      "source": "src/components/ui/alert.tsx",
+      "export": "Alert",
+      "props": {
+        "variant": {
+          "type": "string",
+          "enum": [
+            "default",
+            "destructive"
+          ]
+        }
+      }
+    },
+    {
+      "source": "src/components/ui/alert.tsx",
+      "export": "AlertTitle",
+      "props": {
+        "children": {
+          "type": "string",
+          "default": "Alert Title"
+        }
+      }
+    },
+    {
+      "source": "src/components/ui/alert.tsx",
+      "export": "AlertDescription",
+      "props": {
+        "children": {
+          "type": "string",
+          "default": "This is an alert description."
+        }
+      }
+    },
+    {
+      "source": "src/components/ui/card.tsx",
+      "export": "CardHeader",
+      "props": {}
+    },
+    {
+      "source": "src/components/ui/card.tsx",
+      "export": "CardFooter",
+      "props": {}
+    },
+    {
+      "source": "src/components/ui/card.tsx",
+      "export": "CardTitle",
+      "props": {
+        "children": {
+          "type": "string",
+          "default": "Card Title"
+        }
+      }
+    },
+    {
+      "source": "src/components/ui/card.tsx",
+      "export": "CardDescription",
+      "props": {
+        "children": {
+          "type": "string",
+          "default": "Card description text."
+        }
+      }
+    },
+    {
+      "source": "src/components/ui/card.tsx",
+      "export": "CardContent",
+      "props": {}
+    }
+  ]
+}
