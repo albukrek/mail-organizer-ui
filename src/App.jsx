@@ -191,18 +191,25 @@ function App() {
                 className="matched-group-header" 
                 onClick={() => toggleGroup(group.id)}
               >
-                <input 
-                  type="checkbox" 
-                  className="matched-group-select-all"
-                  checked={getSelectedCount(group.id) === group.count && group.count > 0}
-                  onChange={() => toggleSelectAllInGroup(group.id)}
-                  disabled={group.count === 0}
-                />
-                <span className="matched-group-id">{group.id}</span>
-                <span className="matched-group-name">{group.name}</span>
-                <span className="matched-group-count">{group.count} email{group.count !== 1 ? 's' : ''}</span>
-                <span className="matched-group-selection-count">{getSelectedCount(group.id)} SELECTED</span>
-                <span className={`matched-group-triangle ${expandedGroups[group.id] ? 'expanded' : ''}`}>▼</span>
+                {/* Left group: checkbox, ID, and name */}
+                <div className="matched-group-left">
+                  <input 
+                    type="checkbox" 
+                    className="matched-group-select-all"
+                    checked={getSelectedCount(group.id) === group.count && group.count > 0}
+                    onChange={() => toggleSelectAllInGroup(group.id)}
+                    disabled={group.count === 0}
+                  />
+                  <span className="matched-group-id">{group.id}</span>
+                  <span className="matched-group-name">{group.name}</span>
+                </div>
+                
+                {/* Right group: counts and triangle indicator */}
+                <div className="matched-group-right">
+                  <span className="matched-group-count">{group.count} email{group.count !== 1 ? 's' : ''}</span>
+                  <span className="matched-group-selection-count">{getSelectedCount(group.id)} SELECTED</span>
+                  <span className={`matched-group-triangle ${expandedGroups[group.id] ? 'expanded' : ''}`}>▼</span>
+                </div>
               </div>
               
               {/* Email Items - only show if group is expanded */}

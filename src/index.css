@@ -404,11 +404,17 @@
   background: #1a1a1a;
 }
 
+/* Left group: checkbox, ID, and name */
+.matched-group-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 /* Group identifier (e.g., "001") */
 .matched-group-id {
   font-weight: bold;
   color: #fff;
-  margin-right: 16px;
   font-size: 13px;
   letter-spacing: 0.5px;
 }
@@ -416,27 +422,31 @@
 /* Group name (e.g., "FAMILY") */
 .matched-group-name {
   color: #fff;
-  margin-right: 16px;
   font-size: 13px;
+}
+
+/* Right group: counts and triangle indicator */
+.matched-group-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
 }
 
 /* Number of emails in group */
 .matched-group-count {
   color: #8ec8ff;
   font-size: 13px;
-  margin-right: 16px;
 }
 
 /* Number of selected emails */
 .matched-group-selection-count {
   color: #b7d7a8;
   font-size: 13px;
-  margin-right: 16px;
 }
 
 /* Expand/collapse triangle indicator */
 .matched-group-triangle {
-  margin-left: auto;
   font-size: 16px;
   color: #8ec8ff;
   transition: transform 0.2s ease;
@@ -536,7 +546,7 @@
 
 /* Select all checkbox in group header */
 .matched-group-select-all {
-  margin-right: 16px;
+  margin-right: 8px;
 }
 
 /* Group header with select all checkbox */
@@ -560,7 +570,7 @@
 
 /* Ensure select all checkbox matches style of other checkboxes */
 .matched-group-select-all {
-  margin-right: 16px;
+  margin-right: 8px;
 }
 
 /* Make sure all existing styles are preserved - no changes made to existing rules */
