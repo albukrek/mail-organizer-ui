@@ -16,7 +16,64 @@ const LABEL_GROUPS = [
 
 function App() {
   const [loaded, setLoaded] = useState(false);
+  
+  // State for group expansion/collapse
+  const [expandedGroups, setExpandedGroups] = useState({});
+  
+  // State for email selection within groups
+  const [selectedEmails, setSelectedEmails] = useState({});
 
+  // Toggle group expansion/collapse
+  const toggleGroup = (groupId) => {
+    setExpandedGroups(prev => ({
+      ...prev,
+      [groupId]: !prev[groupId]
+    }));
+  };
+  
+  // Toggle individual email selection
+  const toggleEmailSelection = (groupId, emailIndex) => {
+    setSelectedEmails(prev => {
+      const groupSelections = prev[groupId] || [];
+      const newSelections = groupSelections.includes(emailIndex)
+        ? groupSelections.filter(i => i !== emailIndex)
+        : [...groupSelections, emailIndex];
+      
+      return {
+        ...prev,
+        [groupId]: newSelections
+      };
+    });
+  };
+  
+  // Toggle select all in group
+  const toggleSelectAllInGroup = (groupId) => {
+    const group = LABEL_GROUPS.find(g => g.id === groupId);
+    if (!group) return;
+    
+    // If all emails are selected, deselect all
+    const currentSelections = selectedEmails[groupId] || [];
+    if (currentSelections.length === group.count) {
+      setSelectedEmails(prev => {
+        const newSelections = { ...prev };
+        delete newSelections[groupId];
+        return newSelections;
+      });
+    } else {
+      // Select all emails in group
+      const allIndices = Array.from({ length: group.count }, (_, i) => i);
+      setSelectedEmails(prev => ({
+        ...prev,
+        [groupId]: allIndices
+      }));
+    }
+  };
+  
+  // Get count of selected emails in a group
+  const getSelectedCount = (groupId) => {
+    return selectedEmails[groupId]?.length || 0;
+  };
+  
   return (
     <div className="app">
       {/* Header */}
@@ -121,6 +178,59 @@ function App() {
             </select>
             <button className="btn toolbar-btn">Apply</button>
           </div>
+        </div>
+      )}
+
+      {/* Matched Emails Panel - only show if loaded */}
+      {loaded && (
+        <div className="matched-emails-container">
+          {LABEL_GROUPS.map(group => (
+            <div key={group.id} className="matched-group">
+              {/* Group Header */}
+              <div 
+                className="matched-group-header" 
+                onClick={() => toggleGroup(group.id)}
+              >
+                <input 
+                  type="checkbox" 
+                  className="matched-group-select-all"
+                  checked={getSelectedCount(group.id) === group.count && group.count > 0}
+                  onChange={() => toggleSelectAllInGroup(group.id)}
+                  disabled={group.count === 0}
+                />
+                <span className="matched-group-id">{group.id}</span>
+                <span className="matched-group-name">{group.name}</span>
+                <span className="matched-group-count">{group.count} email{group.count !== 1 ? 's' : ''}</span>
+                <span className="matched-group-selection-count">{getSelectedCount(group.id)} SELECTED</span>
+                <span className={`matched-group-arrow ${expandedGroups[group.id] ? '' : 'collapsed'}`}>↓</span>
+              </div>
+              
+              {/* Email Items - only show if group is expanded */}
+              {expandedGroups[group.id] && group.count > 0 && (
+                <>
+                  {Array.from({ length: group.count }, (_, i) => (
+                    <div key={`${group.id}-email-${i}`} className="matched-email-item">
+                      <input 
+                        type="checkbox" 
+                        className="matched-email-checkbox"
+                        checked={getSelectedCount(group.id) > 0 && selectedEmails[group.id]?.includes(i)}
+                        onChange={() => toggleEmailSelection(group.id, i)}
+                      />
+                      <span className="matched-email-sender">Edo ALBUKREK</span>
+                      <span className="matched-email-subject">Test Email {i + 1} - {group.name} Project Update</span>
+                      <div className="matched-email-progress">
+                        <div className="matched-email-progress-bar" style={{ width: '80%' }}></div>
+                      </div>
+                      <span className="matched-email-progress-label">80%</span>
+                      <span className="matched-email-date">Jul 9, 2026</span>
+                    </div>
+                  ))}
+                </>
+              )}
+              
+              {/* Empty group placeholder (not shown since we filter out groups with 0 count) */}
+            </div>
+          ))}
         </div>
       )}
     </div>
