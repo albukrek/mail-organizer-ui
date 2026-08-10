@@ -434,16 +434,16 @@
   margin-right: 16px;
 }
 
-/* Expand/collapse arrow */
-.matched-group-arrow {
+/* Expand/collapse triangle indicator */
+.matched-group-triangle {
   margin-left: auto;
   font-size: 16px;
   color: #8ec8ff;
   transition: transform 0.2s ease;
 }
 
-.matched-group-arrow.collapsed {
-  transform: rotate(90deg);
+.matched-group-triangle.expanded {
+  transform: rotate(180deg);
 }
 
 /* Individual email item */

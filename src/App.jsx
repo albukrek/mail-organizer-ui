@@ -202,7 +202,7 @@ function App() {
                 <span className="matched-group-name">{group.name}</span>
                 <span className="matched-group-count">{group.count} email{group.count !== 1 ? 's' : ''}</span>
                 <span className="matched-group-selection-count">{getSelectedCount(group.id)} SELECTED</span>
-                <span className={`matched-group-arrow ${expandedGroups[group.id] ? '' : 'collapsed'}`}>↓</span>
+                <span className={`matched-group-triangle ${expandedGroups[group.id] ? 'expanded' : ''}`}>▼</span>
               </div>
               
               {/* Email Items - only show if group is expanded */}
