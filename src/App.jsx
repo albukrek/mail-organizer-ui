@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import gmailLogo from '/gmail_logo.png';
+import UnmatchedEmailsPanel from './components/UnmatchedEmailsPanel.jsx';
 
 const TOTAL_EMAILS = 13;
 const MATCHED = 1;
@@ -238,6 +239,13 @@ function App() {
               {/* Empty group placeholder (not shown since we filter out groups with 0 count) */}
             </div>
           ))}
+        </div>
+      )}
+
+      {/* UNMATCHED EMAILS PANEL — YOUR WORK IS HERE — NOW INTEGRATED */}
+      {loaded && (
+        <div className="unmatched-emails-container" style={{ marginTop: '30px' }}>
+          <UnmatchedEmailsPanel />
         </div>
       )}
     </div>
