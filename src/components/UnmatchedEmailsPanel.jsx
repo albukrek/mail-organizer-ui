@@ -128,14 +128,13 @@ function UnmatchedEmailsPanel({
               onClick={onDeleteSelected}
               disabled={selectedCount === 0}
               style={{
-                backgroundColor: selectedCount === 0 ? '#444' : '#b02a20',
-                color: '#fff',
                 border: 'none',
                 borderRadius: '4px',
                 padding: '10px 16px',
                 fontSize: '12px',
-                cursor: selectedCount === 0 ? 'not-allowed' : 'pointer',
-                height: 'auto'
+                height: 'auto',
+                opacity: selectedCount === 0 ? 0.5 : 1,
+                cursor: selectedCount === 0 ? 'not-allowed' : 'pointer'
               }}
             >
               Delete Selected
