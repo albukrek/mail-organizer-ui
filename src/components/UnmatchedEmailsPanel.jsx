@@ -37,6 +37,30 @@ function UnmatchedEmailsPanel({
 
   return (
     <>
+      {/* Panel title (V3) — count is live, updates as emails are deleted */}
+      <div style={{
+        backgroundColor: '#0a0a0a',
+        padding: '12px 16px',
+        borderBottom: '1px solid #333',
+        borderRadius: '6px 6px 0 0',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.5)',
+        width: '100%',
+        maxWidth: '100%'
+      }}>
+        <span style={{
+          color: '#fff',
+          fontSize: '14px',
+          fontWeight: 'bold',
+          textTransform: 'uppercase',
+          letterSpacing: '0.5px'
+        }}>Unmatched Emails</span>
+        <span style={{
+          color: '#8ec8ff',
+          fontSize: '14px',
+          fontWeight: 'bold'
+        }}> ({emails.length})</span>
+      </div>
+
       {/* Header with controls */}
       <div className="unmatched-emails-header" style={{
         backgroundColor: '#0a0a0a',
@@ -45,7 +69,7 @@ function UnmatchedEmailsPanel({
         display: 'flex',
         flexDirection: 'column',
         gap: '12px',
-        borderRadius: '6px 6px 0 0',
+        borderRadius: '0',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.5)',
         width: '100%',
         maxWidth: '100%'
@@ -244,7 +268,7 @@ function UnmatchedEmailsPanel({
               </div>
 
               {/* Sender column - fixed width */}
-              <span className="matched-email-sender" style={{
+              <span className="matched-email-sender" dir="auto" style={{
                 color: '#8ec8ff',
                 fontSize: '12px',
                 fontWeight: 'normal',
@@ -259,7 +283,7 @@ function UnmatchedEmailsPanel({
               </span>
 
               {/* Subject column - fixed width */}
-              <span className="matched-email-subject" style={{
+              <span className="matched-email-subject" dir="auto" style={{
                 color: '#fff',
                 fontSize: '12px',
                 fontWeight: 'normal',
@@ -270,6 +294,18 @@ function UnmatchedEmailsPanel({
                 maxWidth: '220px'
               }}>
                 {email.subject}
+              </span>
+
+              {/* Confidence column - 0% for unmatched (G6), Low color per legend (<50%) */}
+              <span style={{
+                color: '#b02a20',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                marginLeft: '16px',
+                minWidth: '32px',
+                textAlign: 'right'
+              }}>
+                {email.confidence}%
               </span>
 
               {/* Date column - positioned at the far right corner of the container */}
