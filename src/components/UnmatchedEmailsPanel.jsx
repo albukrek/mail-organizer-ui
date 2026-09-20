@@ -123,41 +123,23 @@ function UnmatchedEmailsPanel({
               Delete All
             </button>
 
-            {selectedCount > 0 ? (
-              <button
-                className="btn btn-danger"
-                onClick={onDeleteSelected}
-                style={{
-                  backgroundColor: '#b02a20',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '4px',
-                  padding: '10px 16px',
-                  fontSize: '12px',
-                  cursor: 'pointer',
-                  height: 'auto'
-                }}
-              >
-                Delete {selectedCount} Selected
-              </button>
-            ) : (
-              <button
-                className="btn btn-danger"
-                disabled={true}
-                style={{
-                  backgroundColor: '#444',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '4px',
-                  padding: '10px 16px',
-                  fontSize: '12px',
-                  cursor: 'not-allowed',
-                  height: 'auto'
-                }}
-              >
-                Delete Selected
-              </button>
-            )}
+            <button
+              className="btn btn-danger"
+              onClick={onDeleteSelected}
+              disabled={selectedCount === 0}
+              style={{
+                backgroundColor: selectedCount === 0 ? '#444' : '#b02a20',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                padding: '10px 16px',
+                fontSize: '12px',
+                cursor: selectedCount === 0 ? 'not-allowed' : 'pointer',
+                height: 'auto'
+              }}
+            >
+              Delete Selected
+            </button>
           </div>
         </div>
       </div>
