@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import './UnmatchedEmailsPanel.css';
 
 // Unmatched Emails Panel — prop-driven (data + selection owned by App.jsx).
-// Visual layout unchanged from the verified version; only the data source
-// and the delete actions are now wired to real state.
+// Phase 3 (item 11): all styling now lives in UnmatchedEmailsPanel.css
+// (previously inline). Behavior and visuals are unchanged.
 
 const LABEL_GROUPS = [
   { id: '001', name: 'Family' },
@@ -38,128 +39,45 @@ function UnmatchedEmailsPanel({
   return (
     <>
       {/* Panel title (V3) — count is live, updates as emails are deleted */}
-      <div style={{
-        backgroundColor: '#0a0a0a',
-        padding: '12px 16px',
-        borderBottom: '1px solid #333',
-        borderRadius: '6px 6px 0 0',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.5)',
-        width: '100%',
-        maxWidth: '100%'
-      }}>
-        <span style={{
-          color: '#fff',
-          fontSize: '14px',
-          fontWeight: 'bold',
-          textTransform: 'uppercase',
-          letterSpacing: '0.5px'
-        }}>Unmatched Emails</span>
-        <span style={{
-          color: '#8ec8ff',
-          fontSize: '14px',
-          fontWeight: 'bold'
-        }}> ({emails.length})</span>
+      <div className="unmatched-panel-title">
+        <span className="unmatched-panel-title-text">Unmatched Emails</span>
+        <span className="unmatched-panel-title-count"> ({emails.length})</span>
       </div>
 
       {/* Header with controls */}
-      <div className="unmatched-emails-header" style={{
-        backgroundColor: '#0a0a0a',
-        padding: '12px 16px',
-        borderBottom: '1px solid #333',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '12px',
-        borderRadius: '0',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.5)',
-        width: '100%',
-        maxWidth: '100%'
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '12px',
-          width: '100%'
-        }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            flex: 1
-          }}>
+      <div className="unmatched-panel-header">
+        <div className="unmatched-panel-header-row">
+          <div className="unmatched-panel-header-left">
             <select
-              className="toolbar-dropdown"
+              className="unmatched-panel-filter"
               value={selectedFilter}
               onChange={(e) => setSelectedFilter(e.target.value)}
-              style={{
-                backgroundColor: '#1a1a1a',
-                color: '#fff',
-                border: '1px solid #333',
-                borderRadius: '4px',
-                padding: '8px 12px',
-                fontSize: '12px',
-                minWidth: '200px',
-                maxWidth: '250px',
-                height: 'auto'
-              }}
             >
               <option value="">Select Label Group</option>
               {LABEL_GROUPS.map(group => (
                 <option key={group.id} value={group.name}>{group.name}</option>
               ))}
             </select>
-            <button
-              className="btn toolbar-btn"
-              style={{
-                backgroundColor: '#333',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '4px',
-                padding: '8px 16px',
-                fontSize: '12px',
-                cursor: 'pointer',
-                height: 'auto'
-              }}
-            >
+            <button className="unmatched-panel-apply-btn">
               Apply
             </button>
           </div>
 
-          <div style={{
-            display: 'flex',
-            gap: '12px'
-          }}>
+          <div className="unmatched-panel-header-right">
             <button
-              className="btn btn-danger"
+              className="btn btn-danger unmatched-panel-delete-btn"
               onClick={onDeleteAll}
               disabled={emails.length === 0}
-              style={{
-                backgroundColor: '#b02a20',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '4px',
-                padding: '10px 16px',
-                fontSize: '12px',
-                cursor: 'pointer',
-                height: 'auto'
-              }}
+              style={{ cursor: 'pointer' }}
             >
               Delete All
             </button>
 
             <button
-              className="btn btn-danger"
+              className="btn btn-danger unmatched-panel-delete-btn"
               onClick={onDeleteSelected}
               disabled={selectedCount === 0}
-              style={{
-                border: 'none',
-                borderRadius: '4px',
-                padding: '10px 16px',
-                fontSize: '12px',
-                height: 'auto',
-                opacity: selectedCount === 0 ? 0.5 : 1,
-                cursor: selectedCount === 0 ? 'not-allowed' : 'pointer'
-              }}
+              style={selectedCount === 0 ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
             >
               Delete Selected
             </button>
@@ -168,68 +86,24 @@ function UnmatchedEmailsPanel({
       </div>
 
       {/* Clear visual separator line */}
-      <div style={{
-        height: '1px',
-        backgroundColor: '#333',
-        margin: '0 16px',
-        marginTop: '10px',
-        marginBottom: '10px'
-      }}></div>
+      <div className="unmatched-panel-separator"></div>
 
       {/* Email list */}
-      <div className="unmatched-emails-list" style={{
-        backgroundColor: '#0a0a0a',
-        padding: '12px 16px',
-        maxHeight: '400px',
-        overflowY: 'auto',
-        borderRadius: '0 0 6px 6px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.5)',
-        width: '100%',
-        maxWidth: '100%'
-      }}>
+      <div className="unmatched-panel-list">
         {/* Select All checkbox row */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '10px 0',
-          borderBottom: '1px solid #222',
-          marginBottom: '10px'
-        }}>
-          <div style={{
-            width: '16px',
-            height: '12px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
+        <div className="unmatched-panel-select-all-row">
+          <div className="unmatched-panel-checkbox-cell">
             <input
               type="checkbox"
-              className="matched-group-select-all"
+              className="unmatched-panel-checkbox"
               checked={allVisibleSelected}
               onChange={() => onSetVisibleSelection(filteredEmails.map(e => e.id), allVisibleSelected)}
-              style={{
-                width: '12px',
-                height: '12px',
-                margin: '0',
-                padding: '0'
-              }}
             />
           </div>
-          <span className="matched-group-name" style={{
-            color: '#fff',
-            fontSize: '12px',
-            fontWeight: 'normal',
-            marginLeft: '4px'
-          }}>Select All</span>
+          <span className="unmatched-panel-select-all-label">Select All</span>
 
           {selectedCount > 0 && (
-            <span className="matched-group-selection-count" style={{
-              color: '#8ec8ff',
-              fontSize: '12px',
-              fontWeight: 'normal',
-              marginLeft: '16px'
-            }}>
+            <span className="unmatched-panel-selected-count">
               {selectedCount} Selected
             </span>
           )}
@@ -237,97 +111,40 @@ function UnmatchedEmailsPanel({
 
         {filteredEmails.length > 0 ? (
           filteredEmails.map(email => (
-            <div key={email.id} className="matched-email-item" style={{
-              display: 'flex',
-              alignItems: 'center',
-              padding: '10px',
-              borderBottom: '1px solid #222',
-              width: '100%'
-            }}>
+            <div key={email.id} className="unmatched-panel-item">
               {/* Checkbox column - aligned with Select All */}
-              <div style={{
-                width: '16px',
-                height: '12px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginRight: '8px'
-              }}>
+              <div className="unmatched-panel-item-checkbox-cell">
                 <input
                   type="checkbox"
-                  className="matched-email-checkbox"
+                  className="unmatched-panel-checkbox"
                   checked={selectedIds.includes(email.id)}
                   onChange={() => onToggleEmail(email.id)}
-                  style={{
-                    width: '12px',
-                    height: '12px',
-                    margin: '0',
-                    padding: '0'
-                  }}
                 />
               </div>
 
-              {/* Sender column - fixed width */}
-              <span className="matched-email-sender" dir="auto" style={{
-                color: '#8ec8ff',
-                fontSize: '12px',
-                fontWeight: 'normal',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                minWidth: '180px',
-                maxWidth: '180px',
-                marginRight: '10px'
-              }}>
+              {/* Sender column */}
+              <span className="unmatched-panel-sender" dir="auto">
                 {email.sender}
               </span>
 
-              {/* Subject column - fixed width */}
-              <span className="matched-email-subject" dir="auto" style={{
-                color: '#fff',
-                fontSize: '12px',
-                fontWeight: 'normal',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                minWidth: '220px',
-                maxWidth: '220px'
-              }}>
+              {/* Subject column */}
+              <span className="unmatched-panel-subject" dir="auto">
                 {email.subject}
               </span>
 
               {/* Confidence column - 0% for unmatched (G6), Low color per legend (<50%) */}
-              <span style={{
-                color: '#b02a20',
-                fontSize: '12px',
-                fontWeight: 'bold',
-                marginLeft: '16px',
-                minWidth: '32px',
-                textAlign: 'right'
-              }}>
+              <span className="unmatched-panel-confidence">
                 {email.confidence}%
               </span>
 
               {/* Date column - positioned at the far right corner of the container */}
-              <span className="matched-email-date" style={{
-                color: '#aaa',
-                fontSize: '12px',
-                fontWeight: 'normal',
-                marginLeft: 'auto',
-                minWidth: '100px',
-                maxWidth: '100px'
-              }}>
+              <span className="unmatched-panel-date">
                 {email.date}
               </span>
             </div>
           ))
         ) : (
-          <div className="unmatched-emails-empty" style={{
-            color: '#aaa',
-            fontSize: '12px',
-            textAlign: 'center',
-            padding: '20px'
-          }}>
+          <div className="unmatched-panel-empty">
             {selectedFilter ? 'No unmatched emails match your filter' : 'No unmatched emails'}
           </div>
         )}

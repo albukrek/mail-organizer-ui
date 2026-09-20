@@ -1,11 +1,8 @@
 import { useState, useRef } from 'react';
+import { Mail, Trash2, Check } from 'lucide-react';
 import gmailLogo from '/gmail_logo.png';
 import UnmatchedEmailsPanel from './components/UnmatchedEmailsPanel.jsx';
 import { LABEL_GROUPS, MOCK_EMAILS } from './data/mockEmails.js';
-
-// Confidence color per the legend: High ≥80, Medium 50-79, Low <50
-const confidenceColor = (pct) =>
-  pct >= 80 ? '#8a9a6a' : pct >= 50 ? '#c8a05a' : '#b02a20';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -237,14 +234,20 @@ function App() {
       {loaded && (
         <div className="toolbar-container">
           <div className="toolbar-group">
-            <button className="btn toolbar-btn" onClick={scrollMatchedPanel}>Matched Emails</button>
+            {/* V1: static "MATCHED EMAILS" label with envelope icon
+                (still scrolls to the matched panel on click — behavior preserved) */}
+            <button className="toolbar-section-label" onClick={scrollMatchedPanel} title="Scroll to matched emails">
+              <Mail size={16} />
+              <span>Matched Emails</span>
+            </button>
             <button
               className="btn btn-danger toolbar-btn"
               onClick={requestDeleteSelected}
               disabled={selectedIds.length === 0}
               style={selectedIds.length === 0 ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
             >
-              Delete Selected
+              <Trash2 size={14} />
+              <span>Delete Selected</span>
             </button>
             <button
               className="btn toolbar-btn"
@@ -252,9 +255,13 @@ function App() {
               disabled={selectedIds.length === 0}
               style={selectedIds.length === 0 ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
             >
-              Approve Selected
+              <Check size={14} />
+              <span>Approve Selected</span>
             </button>
-            <button className="btn toolbar-btn" onClick={() => approve(emails.map(e => e.id))}>Approve All</button>
+            <button className="btn toolbar-btn" onClick={() => approve(emails.map(e => e.id))}>
+              <Check size={14} />
+              <span>Approve All</span>
+            </button>
           </div>
           <div className="toolbar-separator"></div>
           <div className="toolbar-group">
@@ -287,30 +294,34 @@ function App() {
                   className="matched-group-header"
                   onClick={() => toggleGroup(group.id)}
                 >
-                  {/* Left group: checkbox, ID, and name */}
+                  {/* Left: ID and name */}
                   <div className="matched-group-left">
-                    <input
-                      type="checkbox"
-                      className="matched-group-select-all"
-                      checked={group.emails.every(e => selectedIds.includes(e.id))}
-                      onClick={(e) => e.stopPropagation()}
-                      onChange={() => toggleSelectAllInGroup(group)}
-                    />
                     <span className="matched-group-id">{group.id}</span>
                     <span className="matched-group-name">{group.name}</span>
                   </div>
 
-                  {/* Right group: counts and triangle indicator */}
+                  {/* Right: "N email" pill, triangle, "N SELECTED" */}
                   <div className="matched-group-right">
                     <span className="matched-group-count">{group.emails.length} email{group.emails.length !== 1 ? 's' : ''}</span>
-                    <span className="matched-group-selection-count">{group.emails.filter(e => selectedIds.includes(e.id)).length} SELECTED</span>
                     <span className={`matched-group-triangle ${expandedGroups[group.id] ? 'expanded' : ''}`}>▼</span>
+                    <span className="matched-group-selection-count">{group.emails.filter(e => selectedIds.includes(e.id)).length} SELECTED</span>
                   </div>
                 </div>
 
-                {/* Email Items - only show if group is expanded */}
+                {/* Expanded content: select-all sub-row + email items */}
                 {expandedGroups[group.id] && (
                   <>
+                    {/* V2: "Select all in this group" sub-row */}
+                    <div className="matched-group-select-all-row">
+                      <input
+                        type="checkbox"
+                        className="matched-group-select-all"
+                        checked={group.emails.every(e => selectedIds.includes(e.id))}
+                        onChange={() => toggleSelectAllInGroup(group)}
+                      />
+                      <span className="matched-group-select-all-label">Select all in this group</span>
+                    </div>
+
                     {group.emails.map(email => (
                       <div key={email.id} className="matched-email-item">
                         <input
@@ -320,17 +331,11 @@ function App() {
                           onClick={(e) => e.stopPropagation()}
                           onChange={() => toggleEmail(email.id)}
                         />
-                        <span className="matched-email-sender">{email.sender}</span>
-                        <span className="matched-email-subject">{email.subject}</span>
-                        <div className="matched-email-progress">
-                          <div
-                            className="matched-email-progress-bar"
-                            style={{ width: `${email.confidence}%`, backgroundColor: confidenceColor(email.confidence) }}
-                          ></div>
-                        </div>
-                        <span className="matched-email-progress-label">{email.confidence}%</span>
+                        <span className="matched-email-sender" dir="auto">{email.sender}</span>
+                        <span className="matched-email-subject" dir="auto">{email.subject}</span>
+                        <span className="matched-email-confidence-pill">{email.confidence}%</span>
                         {approvedIds.includes(email.id) && (
-                          <span style={{ color: '#b7d7a8', fontSize: '11px', marginRight: '16px', whiteSpace: 'nowrap' }}>✓ APPROVED</span>
+                          <span className="matched-email-approved">✓ APPROVED</span>
                         )}
                         <span className="matched-email-date">{email.date}</span>
                       </div>

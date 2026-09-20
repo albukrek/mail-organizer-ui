@@ -1,0 +1,231 @@
+/* Unmatched Emails Panel — Phase 3 (item 11): styles moved out of inline JSX
+   into this properly-imported stylesheet. Visuals are identical to the inline
+   version (same colors, padding, widths) — only the location changed.
+   Prefixed `unmatched-panel-*` class names avoid collisions with the matched
+   panel's `matched-email-*` classes. */
+
+/* Panel title row (V3) */
+.unmatched-panel-title {
+  background-color: #0a0a0a;
+  padding: 12px 16px;
+  border-bottom: 1px solid #333;
+  border-radius: 6px 6px 0 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 100%;
+}
+
+.unmatched-panel-title-text {
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.unmatched-panel-title-count {
+  color: #8ec8ff;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Header with controls */
+.unmatched-panel-header {
+  background-color: #0a0a0a;
+  padding: 12px 16px;
+  border-bottom: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.unmatched-panel-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+.unmatched-panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.unmatched-panel-header-right {
+  display: flex;
+  gap: 12px;
+}
+
+.unmatched-panel-filter {
+  background-color: #1a1a1a;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 12px;
+  min-width: 200px;
+  max-width: 250px;
+  height: auto;
+}
+
+.unmatched-panel-apply-btn {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 12px;
+  cursor: pointer;
+  height: auto;
+}
+
+.unmatched-panel-apply-btn:hover {
+  background-color: #444;
+}
+
+/* Delete buttons (red gradient from .btn-danger; panel-specific sizing) */
+.unmatched-panel-delete-btn {
+  border: none;
+  border-radius: 4px;
+  padding: 10px 16px;
+  font-size: 12px;
+  height: auto;
+}
+
+/* Clear visual separator line */
+.unmatched-panel-separator {
+  height: 1px;
+  background-color: #333;
+  margin: 0 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* Email list */
+.unmatched-panel-list {
+  background-color: #0a0a0a;
+  padding: 12px 16px;
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Select All checkbox row */
+.unmatched-panel-select-all-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid #222;
+  margin-bottom: 10px;
+}
+
+.unmatched-panel-checkbox-cell {
+  width: 16px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.unmatched-panel-checkbox {
+  width: 12px;
+  height: 12px;
+  margin: 0;
+  padding: 0;
+}
+
+.unmatched-panel-select-all-label {
+  color: #fff;
+  font-size: 12px;
+  font-weight: normal;
+  margin-left: 4px;
+}
+
+.unmatched-panel-selected-count {
+  color: #8ec8ff;
+  font-size: 12px;
+  font-weight: normal;
+  margin-left: 16px;
+}
+
+/* Email item row */
+.unmatched-panel-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #222;
+  width: 100%;
+  transition: background-color 0.2s ease;
+}
+
+.unmatched-panel-item:hover {
+  background: #1a1a1a;
+}
+
+.unmatched-panel-item-checkbox-cell {
+  width: 16px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+
+.unmatched-panel-sender {
+  color: #8ec8ff;
+  font-size: 12px;
+  font-weight: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 180px;
+  max-width: 180px;
+  margin-right: 10px;
+}
+
+.unmatched-panel-subject {
+  color: #fff;
+  font-size: 12px;
+  font-weight: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 220px;
+  max-width: 220px;
+}
+
+/* Confidence (0%) — Low red per legend */
+.unmatched-panel-confidence {
+  color: #b02a20;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 16px;
+  min-width: 32px;
+  text-align: right;
+}
+
+.unmatched-panel-date {
+  color: #aaa;
+  font-size: 12px;
+  font-weight: normal;
+  margin-left: auto;
+  min-width: 100px;
+  max-width: 100px;
+}
+
+/* Empty state */
+.unmatched-panel-empty {
+  color: #aaa;
+  font-size: 12px;
+  text-align: center;
+  padding: 20px;
+}

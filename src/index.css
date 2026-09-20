@@ -314,13 +314,15 @@
 
 
 /* === Email Management Toolbar === */
+/* V1: with icons the controls are wider, so spacing is tightened and every
+   control is non-shrinking + nowrap to guarantee a single line in 900px. */
 .toolbar-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: #0a0a0a;
   border-radius: 6px;
-  padding: 14px 20px;
+  padding: 14px 16px;
   margin-bottom: 22px;
   box-shadow: 0 6px 15px rgba(0,0,0,0.5);
   margin-top: 10px;
@@ -329,26 +331,55 @@
 .toolbar-group {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .toolbar-separator {
   width: 1px;
   height: 24px;
   background: #000;
-  margin: 0 15px;
+  margin: 0 10px;
+  flex-shrink: 0;
 }
 
 .toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   border: none;
   border-radius: 4px;
-  padding: 7px 16px;
+  padding: 7px 12px;
   font-size: 12px;
   font-weight: bold;
   cursor: pointer;
   color: #eee;
+  white-space: nowrap;
+  flex-shrink: 0;
   background: linear-gradient(#5a5a5a, #3a3a3a);
   box-shadow: 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+/* V1: static section label (envelope icon + uppercase text) */
+.toolbar-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 7px 4px 7px 4px;
+  margin-right: 4px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.toolbar-section-label svg {
+  color: #8ec8ff;
 }
 
 .toolbar-btn:hover {
@@ -370,45 +401,42 @@
   margin-right: 10px;
 }
 
-/* === Matched Emails Panel === */
-/* Main container for the Matched Emails Panel */
+/* === Matched Emails Panel (V2: separate rounded cards + pill badges) === */
+/* Main container — transparent, cards gap apart */
 .matched-emails-container {
-  background: #0a0a0a;
-  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin-bottom: 22px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.5);
-  overflow: hidden;
 }
 
-/* Individual group container */
+/* Individual group = its own rounded card */
 .matched-group {
-  border-bottom: 1px solid #222;
-  transition: all 0.2s ease;
-}
-
-.matched-group:last-child {
-  border-bottom: none;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 }
 
 /* Group header - clickable area */
 .matched-group-header {
   display: flex;
   align-items: center;
-  padding: 14px 20px;
+  padding: 12px 16px;
   cursor: pointer;
-  background: #111;
-  border-bottom: 1px solid #222;
+  background: #161616;
 }
 
 .matched-group-header:hover {
-  background: #1a1a1a;
+  background: #1d1d1d;
 }
 
-/* Left group: checkbox, ID, and name */
+/* Left: ID and name */
 .matched-group-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 /* Group identifier (e.g., "001") */
@@ -425,29 +453,37 @@
   font-size: 13px;
 }
 
-/* Right group: counts and triangle indicator */
+/* Right: "N email" pill, triangle, "N SELECTED" */
 .matched-group-right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   margin-left: auto;
 }
 
-/* Number of emails in group */
+/* "N email" pill badge */
 .matched-group-count {
-  color: #8ec8ff;
-  font-size: 13px;
+  background: #2a2a2a;
+  color: #eee;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 10px;
+  white-space: nowrap;
 }
 
-/* Number of selected emails */
+/* "N SELECTED" */
 .matched-group-selection-count {
   color: #b7d7a8;
-  font-size: 13px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 /* Expand/collapse triangle indicator */
 .matched-group-triangle {
-  font-size: 16px;
+  font-size: 14px;
   color: #8ec8ff;
   transition: transform 0.2s ease;
 }
@@ -456,21 +492,32 @@
   transform: rotate(180deg);
 }
 
+/* "Select all in this group" sub-row */
+.matched-group-select-all-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #0d0d0d;
+  border-top: 1px solid #222;
+  border-bottom: 1px solid #222;
+}
+
+.matched-group-select-all-label {
+  color: #ccc;
+  font-size: 12px;
+}
+
 /* Individual email item */
 .matched-email-item {
   display: flex;
   align-items: center;
-  padding: 12px 20px;
-  border-bottom: 1px solid #222;
+  padding: 12px 16px;
   transition: background-color 0.2s ease;
 }
 
 .matched-email-item:hover {
   background: #1a1a1a;
-}
-
-.matched-email-item:last-child {
-  border-bottom: none;
 }
 
 /* Checkbox for selecting individual emails */
@@ -500,37 +547,29 @@
   max-width: 280px;
 }
 
-/* Progress bar container */
-.matched-email-progress {
-  display: flex;
-  align-items: center;
-  margin-right: 16px;
-  width: 80px;
-  height: 8px;
-  background: #333;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-/* Progress bar fill */
-.matched-email-progress-bar {
-  height: 100%;
-  border-radius: 4px;
-  background: #8a9a6a;
-  transition: width 0.3s ease;
-}
-
-/* Progress percentage label */
-.matched-email-progress-label {
-  color: #fff;
+/* Confidence pill (cream, per reference) */
+.matched-email-confidence-pill {
+  margin-left: auto;
+  background: #f0e6c8;
+  color: #1a1a1a;
   font-size: 11px;
-  margin-left: 8px;
+  font-weight: bold;
+  padding: 3px 10px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+/* Approved badge */
+.matched-email-approved {
+  color: #b7d7a8;
+  font-size: 11px;
+  margin-left: 12px;
   white-space: nowrap;
 }
 
 /* Date received */
 .matched-email-date {
-  color: #8ec8ff;
+  color: #aaa;
   font-size: 12px;
   margin-left: 16px;
   white-space: nowrap;
@@ -538,39 +577,11 @@
 
 /* Empty group state message */
 .matched-empty-group {
-  padding: 20px 20px;
+  padding: 20px;
   color: #8ec8ff;
   text-align: center;
   font-size: 13px;
-}
-
-/* Select all checkbox in group header */
-.matched-group-select-all {
-  margin-right: 8px;
-}
-
-/* Group header with select all checkbox */
-.matched-group-header-with-checkbox {
-  display: flex;
-  align-items: center;
-  padding: 14px 20px;
-  cursor: pointer;
   background: #111;
-  border-bottom: 1px solid #222;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
 }
-
-.matched-group-header-with-checkbox:hover {
-  background: #1a1a1a;
-}
-
-/* Group header with select all checkbox and arrow */
-.matched-group-header-with-checkbox .matched-group-arrow {
-  margin-left: auto;
-}
-
-/* Ensure select all checkbox matches style of other checkboxes */
-.matched-group-select-all {
-  margin-right: 8px;
-}
-
-/* Make sure all existing styles are preserved - no changes made to existing rules */
