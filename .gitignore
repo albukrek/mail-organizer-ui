@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Project-local scratch (rollback copies + Hermes plan notes) — not part of the app
+backup/
+.hermes/
