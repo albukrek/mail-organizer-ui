@@ -1,7 +1,11 @@
-import { useState, useRef } from 'react';
-import { Mail, Trash2, Check } from 'lucide-react';
+import { useState } from 'react';
 import gmailLogo from '/gmail_logo.png';
+import StatsRow from './components/StatsRow.jsx';
+import Toolbar from './components/Toolbar.jsx';
+import MatchedEmailsPanel from './components/MatchedEmailsPanel.jsx';
 import UnmatchedEmailsPanel from './components/UnmatchedEmailsPanel.jsx';
+import ConfirmDialog from './components/ConfirmDialog.jsx';
+import { useStatusFlash } from './hooks/useStatusFlash.js';
 import { LABEL_GROUPS, MOCK_EMAILS } from './data/mockEmails.js';
 
 function App() {
@@ -25,14 +29,8 @@ function App() {
   // Confirmation dialog: null | { title, message, ids }
   const [confirmAction, setConfirmAction] = useState(null);
 
-  // Transient status message (auto-clears; a new flash cancels the previous timer)
-  const [statusFlash, setStatusFlash] = useState('');
-  const flashTimer = useRef(null);
-  const flash = (msg) => {
-    setStatusFlash(msg);
-    if (flashTimer.current) clearTimeout(flashTimer.current);
-    flashTimer.current = setTimeout(() => setStatusFlash(''), 3000);
-  };
+  // Transient status message (auto-clears; timer cleaned up on unmount)
+  const [statusFlash, flash] = useStatusFlash();
 
   const matchedEmails = emails.filter(e => e.kind === 'matched');
   const unmatchedEmails = emails.filter(e => e.kind === 'unmatched');
@@ -175,237 +173,77 @@ function App() {
       {!loaded && (
         <div className="ready-status">
           <span>Ready to start</span>
-          <button className="btn" onClick={() => setLoaded(true)}>
+          <button type="button" className="btn" onClick={() => setLoaded(true)}>
             Load Data
           </button>
         </div>
       )}
 
-      {/* Status Bar */}
       {loaded && (
         <>
+          {/* Status Bar */}
           <div className="status-bar">
             <span className="status-text">
               {statusFlash
                 ? statusFlash
                 : `Loaded ${emails.length} emails — ${matchedEmails.length} matched, ${unmatchedEmails.length} unmatched`}
             </span>
-            <button className="btn" onClick={() => setLoaded(false)}>
+            <button type="button" className="btn" onClick={() => setLoaded(false)}>
               Load Data
             </button>
           </div>
 
-          <div className="stats-row">
-            <div className="legend-card">
-              <div className="legend-row">
-                <span>High (≥80%)</span>
-                <span className="legend-swatch swatch-high" />
-              </div>
-              <div className="legend-row">
-                <span>Medium (50-79%)</span>
-                <span className="legend-swatch swatch-medium" />
-              </div>
-              <div className="legend-row">
-                <span>Low (&lt;50%)</span>
-                <span className="legend-swatch swatch-low" />
-              </div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-num">{emails.length}</div>
-              <div className="stat-label">Total Emails</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-num">{matchedEmails.length}</div>
-              <div className="stat-label">Matched</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-num">{unmatchedEmails.length}</div>
-              <div className="stat-label">Unmatched</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-num">{LABEL_GROUPS.length}</div>
-              <div className="stat-label">Label Groups</div>
-            </div>
+          <StatsRow
+            total={emails.length}
+            matched={matchedEmails.length}
+            unmatched={unmatchedEmails.length}
+            labelGroups={LABEL_GROUPS.length}
+          />
+
+          {/* Email Management Toolbar */}
+          <Toolbar
+            selectedCount={selectedIds.length}
+            onScrollMatched={scrollMatchedPanel}
+            onRequestDeleteSelected={requestDeleteSelected}
+            onApproveSelected={() => approve(selectedIds)}
+            onApproveAll={() => approve(emails.map(e => e.id))}
+            label={toolbarLabel}
+            onLabelChange={setToolbarLabel}
+            onApply={applyLabel}
+          />
+
+          {/* Matched Emails Panel */}
+          <MatchedEmailsPanel
+            groups={groupsWithEmails}
+            expandedGroups={expandedGroups}
+            onToggleGroup={toggleGroup}
+            selectedIds={selectedIds}
+            onToggleEmail={toggleEmail}
+            onToggleSelectAllInGroup={toggleSelectAllInGroup}
+            approvedIds={approvedIds}
+          />
+
+          {/* Unmatched Emails Panel */}
+          <div className="unmatched-emails-container">
+            <UnmatchedEmailsPanel
+              emails={unmatchedEmails}
+              selectedIds={selectedIds}
+              onToggleEmail={toggleEmail}
+              onSetVisibleSelection={setUnmatchedVisibleSelection}
+              onDeleteSelected={requestDeleteUnmatchedSelected}
+              onDeleteAll={requestDeleteAllUnmatched}
+            />
           </div>
         </>
       )}
 
-      {/* Email Management Toolbar */}
-      {loaded && (
-        <div className="toolbar-container">
-          <div className="toolbar-group">
-            {/* V1: static "MATCHED EMAILS" label with envelope icon
-                (still scrolls to the matched panel on click — behavior preserved) */}
-            <button className="toolbar-section-label" onClick={scrollMatchedPanel} title="Scroll to matched emails">
-              <Mail size={16} />
-              <span>Matched Emails</span>
-            </button>
-            <button
-              className="btn btn-danger toolbar-btn"
-              onClick={requestDeleteSelected}
-              disabled={selectedIds.length === 0}
-              style={selectedIds.length === 0 ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
-            >
-              <Trash2 size={14} />
-              <span>Delete Selected</span>
-            </button>
-            <button
-              className="btn toolbar-btn"
-              onClick={() => approve(selectedIds)}
-              disabled={selectedIds.length === 0}
-              style={selectedIds.length === 0 ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
-            >
-              <Check size={14} />
-              <span>Approve Selected</span>
-            </button>
-            <button className="btn toolbar-btn" onClick={() => approve(emails.map(e => e.id))}>
-              <Check size={14} />
-              <span>Approve All</span>
-            </button>
-          </div>
-          <div className="toolbar-separator"></div>
-          <div className="toolbar-group">
-            <select
-              className="toolbar-dropdown"
-              value={toolbarLabel}
-              onChange={(e) => setToolbarLabel(e.target.value)}
-            >
-              <option value="">Select Label Group</option>
-              <option value="001">001 - FAMILY</option>
-              <option value="002">002 - BILLS AND INVOICE</option>
-              <option value="003">003 - WORK</option>
-              <option value="005">005 - INSURANCE</option>
-              <option value="007">007 - FRIENDS</option>
-              <option value="100">100 - GENERAL</option>
-            </select>
-            <button className="btn toolbar-btn" onClick={applyLabel}>Apply</button>
-          </div>
-        </div>
-      )}
-
-      {/* Matched Emails Panel - only show if loaded */}
-      {loaded && (
-        <div className="matched-emails-container" id="matched-emails-panel">
-          {groupsWithEmails.length > 0 ? (
-            groupsWithEmails.map(group => (
-              <div key={group.id} className="matched-group">
-                {/* Group Header */}
-                <div
-                  className="matched-group-header"
-                  onClick={() => toggleGroup(group.id)}
-                >
-                  {/* Left: ID and name */}
-                  <div className="matched-group-left">
-                    <span className="matched-group-id">{group.id}</span>
-                    <span className="matched-group-name">{group.name}</span>
-                  </div>
-
-                  {/* Right: "N email" pill, triangle, "N SELECTED" */}
-                  <div className="matched-group-right">
-                    <span className="matched-group-count">{group.emails.length} email{group.emails.length !== 1 ? 's' : ''}</span>
-                    <span className={`matched-group-triangle ${expandedGroups[group.id] ? 'expanded' : ''}`}>▼</span>
-                    <span className="matched-group-selection-count">{group.emails.filter(e => selectedIds.includes(e.id)).length} SELECTED</span>
-                  </div>
-                </div>
-
-                {/* Expanded content: select-all sub-row + email items */}
-                {expandedGroups[group.id] && (
-                  <>
-                    {/* V2: "Select all in this group" sub-row */}
-                    <div className="matched-group-select-all-row">
-                      <input
-                        type="checkbox"
-                        className="matched-group-select-all"
-                        checked={group.emails.every(e => selectedIds.includes(e.id))}
-                        onChange={() => toggleSelectAllInGroup(group)}
-                      />
-                      <span className="matched-group-select-all-label">Select all in this group</span>
-                    </div>
-
-                    {group.emails.map(email => (
-                      <div key={email.id} className="matched-email-item">
-                        <input
-                          type="checkbox"
-                          className="matched-email-checkbox"
-                          checked={selectedIds.includes(email.id)}
-                          onClick={(e) => e.stopPropagation()}
-                          onChange={() => toggleEmail(email.id)}
-                        />
-                        <span className="matched-email-sender" dir="auto">{email.sender}</span>
-                        <span className="matched-email-subject" dir="auto">{email.subject}</span>
-                        <span className="matched-email-confidence-pill">{email.confidence}%</span>
-                        {approvedIds.includes(email.id) && (
-                          <span className="matched-email-approved">✓ APPROVED</span>
-                        )}
-                        <span className="matched-email-date">{email.date}</span>
-                      </div>
-                    ))}
-                  </>
-                )}
-              </div>
-            ))
-          ) : (
-            <div className="matched-empty-group">No matched emails</div>
-          )}
-        </div>
-      )}
-
-      {/* Unmatched Emails Panel */}
-      {loaded && (
-        <div className="unmatched-emails-container" style={{ marginTop: '30px' }}>
-          <UnmatchedEmailsPanel
-            emails={unmatchedEmails}
-            selectedIds={selectedIds}
-            onToggleEmail={toggleEmail}
-            onSetVisibleSelection={setUnmatchedVisibleSelection}
-            onDeleteSelected={requestDeleteUnmatchedSelected}
-            onDeleteAll={requestDeleteAllUnmatched}
-          />
-        </div>
-      )}
-
       {/* Delete Confirmation Dialog */}
       {confirmAction && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 100,
-          }}
-          onClick={() => setConfirmAction(null)}
-        >
-          <div
-            style={{
-              backgroundColor: '#1a1a1a',
-              border: '1px solid #333',
-              borderRadius: '8px',
-              padding: '24px',
-              maxWidth: '420px',
-              width: '90%',
-              boxShadow: '0 8px 30px rgba(0, 0, 0, 0.7)',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold', marginBottom: '10px' }}>
-              {confirmAction.title}
-            </div>
-            <div style={{ color: '#aaa', fontSize: '13px', marginBottom: '20px' }}>
-              {confirmAction.message}
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-              <button className="btn" onClick={() => setConfirmAction(null)}>
-                Cancel
-              </button>
-              <button className="btn btn-danger" onClick={confirmDelete}>
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
+        <ConfirmDialog
+          action={confirmAction}
+          onCancel={() => setConfirmAction(null)}
+          onConfirm={confirmDelete}
+        />
       )}
     </div>
   );

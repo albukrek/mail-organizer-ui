@@ -1,0 +1,521 @@
+/* App styles — moved out of index.css (React-standards pass, C2).
+   index.css keeps only the Tailwind/shadcn theme + base layer.
+   All rules are copied verbatim from the original index.css; the only
+   additions are:
+   - .btn:disabled (replaces the inline opacity/cursor styles)
+   - .matched-group-header button resets (header became a <button> for a11y)
+   - .unmatched-emails-container (was an inline marginTop)
+   - .confirm-overlay / .confirm-dialog (was a wall of inline styles) */
+
+/* === App Shell === */
+.app {
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 30px 25px 80px;
+}
+
+/* === Header === */
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.gmail-logo {
+  display: block;
+  width: 180px;
+  height: 140px;
+  object-fit: contain;
+  background: transparent;
+  margin: 0;
+  margin-bottom: 0;
+}
+
+.open-gmail-link {
+  font-size: 15px;
+  line-height: 1.15;
+  font-weight: bold;
+  color: #8ec8ff;
+  text-decoration: underline;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  margin: 0;
+}
+
+.open-gmail-link:hover {
+  color: #c5e5ff;
+}
+
+.header-right {
+  text-align: left;
+}
+
+.header-right h1 {
+  font-size: 42px;
+  letter-spacing: 1px;
+  margin: 0;
+  color: #fff;
+  font-variant: small-caps;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  line-height: 1.1;
+}
+
+.header-right .subtitle {
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  color: #fff;
+  text-transform: capitalize;
+  font-variant: small-caps;
+  margin-top: 2px;
+}
+
+/* === Status Bar === */
+.ready-status {
+  background: #0a0a0a;
+  border-radius: 6px;
+  padding: 20px 24px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #fff;
+  margin-bottom: 22px;
+}
+
+.status-bar {
+  background: #0a0a0a;
+  border-radius: 6px;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+  margin-bottom: 22px;
+}
+
+.status-bar .status-text {
+  font-size: 14px;
+  color: #fff;
+}
+
+/* === Buttons === */
+.btn {
+  border: none;
+  border-radius: 4px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #eee;
+  background: linear-gradient(#5a5a5a, #3a3a3a);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.btn:hover { filter: brightness(1.1); }
+
+/* Replaces the inline opacity/cursor that disabled buttons used to get */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-danger { background: linear-gradient(#c0392b, #7a1f16); color: #fff; }
+
+/* === Stats Row === */
+.stats-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.legend-card {
+  background: #0a0a0a;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 11px;
+  min-width: 130px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  color: #fff;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 34px;
+  height: 12px;
+  border-radius: 2px;
+  margin-left: 8px;
+}
+
+.swatch-high { background: #8a9a6a; }
+.swatch-medium { background: #c8a05a; }
+.swatch-low { background: #b02a20; }
+
+.stat-card {
+  background: #0a0a0a;
+  border-radius: 6px;
+  flex: 1;
+  text-align: center;
+  padding: 14px 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.stat-num {
+  font-size: 26px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.stat-label {
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: #fff;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+/* === Email Management Toolbar === */
+/* V1: with icons the controls are wider, so spacing is tightened and every
+   control is non-shrinking + nowrap to guarantee a single line in 900px. */
+.toolbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0a0a0a;
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 22px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+  margin-top: 10px;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-separator {
+  width: 1px;
+  height: 24px;
+  background: #000;
+  margin: 0 10px;
+  flex-shrink: 0;
+}
+
+.toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 4px;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #eee;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: linear-gradient(#5a5a5a, #3a3a3a);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+/* V1: static section label (envelope icon + uppercase text) */
+.toolbar-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 7px 4px 7px 4px;
+  margin-right: 4px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.toolbar-section-label svg {
+  color: #8ec8ff;
+}
+
+.toolbar-btn:hover {
+  filter: brightness(1.1);
+}
+
+.btn-danger {
+  background: linear-gradient(#c0392b, #7a1f16);
+  color: #fff;
+}
+
+.toolbar-dropdown {
+  padding: 7px 10px;
+  font-size: 12px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: #222;
+  color: #eee;
+  margin-right: 10px;
+}
+
+/* === Matched Emails Panel (V2: separate rounded cards + pill badges) === */
+/* Main container — transparent, cards gap apart */
+.matched-emails-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+/* Individual group = its own rounded card */
+.matched-group {
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+/* Group header - clickable area (now a <button>; reset native button
+   defaults so it renders exactly like the original div header).
+   Note: inherit font properties individually (NOT the `font` shorthand) —
+   the shorthand would reset line-height to `normal` and shift the layout. */
+.matched-group-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 16px;
+  cursor: pointer;
+  background: #161616;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  text-align: left;
+  user-select: none;
+}
+
+.matched-group-header:hover {
+  background: #1d1d1d;
+}
+
+/* Left: ID and name */
+.matched-group-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Group identifier (e.g., "001") */
+.matched-group-id {
+  font-weight: bold;
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+/* Group name (e.g., "FAMILY") */
+.matched-group-name {
+  color: #fff;
+  font-size: 13px;
+}
+
+/* Right: "N email" pill, triangle, "N SELECTED" */
+.matched-group-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-left: auto;
+}
+
+/* "N email" pill badge */
+.matched-group-count {
+  background: #2a2a2a;
+  color: #eee;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+/* "N SELECTED" */
+.matched-group-selection-count {
+  color: #b7d7a8;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Expand/collapse triangle indicator */
+.matched-group-triangle {
+  font-size: 14px;
+  color: #8ec8ff;
+  transition: transform 0.2s ease;
+}
+
+.matched-group-triangle.expanded {
+  transform: rotate(180deg);
+}
+
+/* "Select all in this group" sub-row */
+.matched-group-select-all-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #0d0d0d;
+  border-top: 1px solid #222;
+  border-bottom: 1px solid #222;
+}
+
+.matched-group-select-all-label {
+  color: #ccc;
+  font-size: 12px;
+}
+
+/* Individual email item */
+.matched-email-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  transition: background-color 0.2s ease;
+}
+
+.matched-email-item:hover {
+  background: #1a1a1a;
+}
+
+/* Checkbox for selecting individual emails */
+.matched-email-checkbox {
+  margin-right: 12px;
+}
+
+/* Sender name */
+.matched-email-sender {
+  color: #8ec8ff;
+  font-size: 13px;
+  margin-right: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+/* Email subject */
+.matched-email-subject {
+  color: #fff;
+  font-size: 13px;
+  margin-right: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 280px;
+}
+
+/* Confidence pill (cream, per reference) */
+.matched-email-confidence-pill {
+  margin-left: auto;
+  background: #f0e6c8;
+  color: #1a1a1a;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 3px 10px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+/* Approved badge */
+.matched-email-approved {
+  color: #b7d7a8;
+  font-size: 11px;
+  margin-left: 12px;
+  white-space: nowrap;
+}
+
+/* Date received */
+.matched-email-date {
+  color: #aaa;
+  font-size: 12px;
+  margin-left: 16px;
+  white-space: nowrap;
+}
+
+/* Empty group state message */
+.matched-empty-group {
+  padding: 20px;
+  color: #8ec8ff;
+  text-align: center;
+  font-size: 13px;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+}
+
+/* === Unmatched panel wrapper (was an inline marginTop) === */
+.unmatched-emails-container {
+  margin-top: 30px;
+}
+
+/* === Delete Confirmation Dialog (was a wall of inline styles) === */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.confirm-dialog {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+}
+
+.confirm-title {
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.confirm-message {
+  color: #aaa;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

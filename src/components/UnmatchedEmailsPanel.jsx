@@ -1,18 +1,12 @@
 import { useState } from 'react';
+import { LABEL_GROUPS } from '../data/mockEmails.js';
 import './UnmatchedEmailsPanel.css';
 
 // Unmatched Emails Panel — prop-driven (data + selection owned by App.jsx).
 // Phase 3 (item 11): all styling now lives in UnmatchedEmailsPanel.css
 // (previously inline). Behavior and visuals are unchanged.
-
-const LABEL_GROUPS = [
-  { id: '001', name: 'Family' },
-  { id: '002', name: 'Bills and Invoice' },
-  { id: '003', name: 'Work' },
-  { id: '005', name: 'Insurance' },
-  { id: '007', name: 'Friends' },
-  { id: '100', name: 'General' },
-];
+// React-standards pass: LABEL_GROUPS now imported from the single data
+// module instead of a local duplicate copy.
 
 function UnmatchedEmailsPanel({
   emails,                  // unmatched emails (array)
